@@ -10,12 +10,13 @@ class VkBot:
     def __init__(self, vk_group_token):
         self.vk_session = vk_api.VkApi(token=vk_group_token)
 
+    '''Функция создания кнопок клавиатуры бота'''
     def keyboard_bot(self):
-        self.batton_bot = VkKeyboard(one_time=True)
+        self.batton_bot = VkKeyboard(one_time=False)
         self.name_btn = ['Кнопка 1', 'Кнопка 2', 'Кнопка 1',]
         self.colors_btn = [VkKeyboardColor.PRIMARY, VkKeyboardColor.NEGATIVE, VkKeyboardColor.POSITIVE]
         for btn, btn_color in zip(self.name_btn, self.colors_btn):
-            self.batton_bot(btn, btn_color)
+            self.batton_bot.add_button(btn, btn_color)
 
 
     '''Функция по распознованию сообщений и user_id. '''
@@ -35,7 +36,8 @@ class VkBot:
     def sender(self, user_id, message, keyboard=None):
         self.params = {'user_id': user_id, 'message': message, 'random_id': 0}
         if keyboard != None:
-            self.params['keyboard'] = keyboard.keyboard_bot()
+            keyboard = self.keyboard_bot()
+            self.params['keyboard'] = keyboard
         else:
             self.params = self.params
         self.vk_session.method('messages.send', self.params)
