@@ -13,9 +13,9 @@ class VkBot:
     '''Функция создания кнопок клавиатуры бота'''
     def keyboard_bot(self):
         self.batton_bot = VkKeyboard(one_time=False)
-        self.name_btn = ['Кнопка 1', 'Кнопка 2', 'Кнопка 1',]
-        self.colors_btn = [VkKeyboardColor.PRIMARY, VkKeyboardColor.NEGATIVE, VkKeyboardColor.POSITIVE]
-        for btn, btn_color in zip(self.name_btn, self.colors_btn):
+        name_btn = ['Кнопка 1', 'Кнопка 2', 'Кнопка 1']
+        colors_btn = [VkKeyboardColor.PRIMARY, VkKeyboardColor.NEGATIVE, VkKeyboardColor.POSITIVE]
+        for btn, btn_color in zip(name_btn, colors_btn):
             self.batton_bot.add_button(btn, btn_color)
 
 
@@ -24,23 +24,23 @@ class VkBot:
         try:
             for self.event in VkLongPoll(self.vk_session).listen():
                 if self.event.type == VkEventType.MESSAGE_NEW and self.event.to_me:
-                    self.user_id = self.event.user_id
-                    self.text = self.event.text.lower()
-                    if self.text == 'старт':
-                        self.sender(self.user_id, "Привет я просто бот!!!")
+                    user_id = self.event.user_id
+                    text = self.event.text.lower()
+                    if text == 'старт':
+                        self.sender(user_id, "Привет я просто бот!!!")
 
         except Exception as ex:
             print(ex)
 
     '''функция ответа на сообщения'''
     def sender(self, user_id, message, keyboard=None):
-        self.params = {'user_id': user_id, 'message': message, 'random_id': 0}
+        params = {'user_id': user_id, 'message': message, 'random_id': 0}
         if keyboard != None:
             keyboard = self.keyboard_bot()
-            self.params['keyboard'] = keyboard
+            params['keyboard'] = keyboard
         else:
-            self.params = self.params
-        self.vk_session.method('messages.send', self.params)
+            params = params
+        self.vk_session.method('messages.send', params)
 
 
 
