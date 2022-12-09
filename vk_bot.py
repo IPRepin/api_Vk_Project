@@ -1,4 +1,4 @@
-import json
+from random import randrange
 import vk_api
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.longpoll import VkLongPoll, VkEventType
@@ -29,7 +29,7 @@ class VkBot:
                     if self.text in ['старт', 'начать', 'start']:
                         self.sender(self.user_id, "Привет я просто бот!!!")
                     elif self.text == 'заполнить данные о себе':
-                        self.add_info_user()
+                        self.add_info_user(self.user_id)
                     elif self.text == 'найти пару':
                         self.find_a_couple()
         except Exception as ex:
@@ -37,7 +37,7 @@ class VkBot:
 
     '''функция ответа на сообщения'''
     def sender(self, user_id, message, keyboard=None):
-        self.params = {'user_id': user_id, 'message': message, 'random_id': 0}
+        self.params = {'user_id': user_id, 'message': message, 'random_id': randrange(10 ** 7),}
         if keyboard != None:
             keyboard = self.keyboard_bot()
             self.params['keyboard'] = keyboard
@@ -46,34 +46,13 @@ class VkBot:
         self.vk_session.method('messages.send', self.params)
 
     '''функция заполнения данных о пользователе (взаимодействует с модулем обращений к БД)'''
-    def add_info_user(self):#логику нужно доработать
-        while True:
-            self.name = self.sender(self.user_id, 'Ваше имя: ')
-            if self.text != '':
-                self.lost_name = self.sender(self.user_id, 'Ваша фамилия: ')
-                if self.text != '':
-                    break
-            else:
-                print('Ведите данные повторно')
-        while True:
-            self.gender = self.sender(self.user_id, 'Укажите ваш пол: ')
-            if self.text == 'женьщина' or 'мужчина' or 'не определился':
-                break
-            else:
-                print('Ведите данные повторно')
-        while True:
-            self.age = self.sender(self.user_id, 'Ваш возраст(цифрой): ')
-            if self.age.isdigit():
-                break
-            else:
-                print('Ведите данные повторно')
-        while True:
-            self.city = self.sender(self.user_id, 'Ваше имя: ')
-            if self.text != '':
-                break
-            else:
-                print('Ведите данные повторно')
-
+    def add_info_user(self, user_id):#логику нужно доработать
+        params = {'user_ids': user_id, 'fields': {
+            'sex': int,
+            'city': 'title',
+            'relation': int
+        }, }
+        self.vk_session.method('users.get', params)
 
 
 
