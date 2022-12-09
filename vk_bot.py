@@ -13,8 +13,8 @@ class VkBot:
     '''Функция создания кнопок клавиатуры бота'''
     def keyboard_bot(self):
         self.batton_bot = VkKeyboard(one_time=False)
-        name_btn = ['Кнопка 1', 'Кнопка 2', 'Кнопка 1']
-        colors_btn = [VkKeyboardColor.PRIMARY, VkKeyboardColor.NEGATIVE, VkKeyboardColor.POSITIVE]
+        name_btn = ['Заполнить данные о себе', 'Найти пару']
+        colors_btn = [VkKeyboardColor.PRIMARY, VkKeyboardColor.NEGATIVE]
         for btn, btn_color in zip(name_btn, colors_btn):
             self.batton_bot.add_button(btn, btn_color)
 
@@ -24,25 +24,62 @@ class VkBot:
         try:
             for self.event in VkLongPoll(self.vk_session).listen():
                 if self.event.type == VkEventType.MESSAGE_NEW and self.event.to_me:
-                    user_id = self.event.user_id
-                    text = self.event.text.lower()
-                    if text == 'старт':
-                        self.sender(user_id, "Привет я просто бот!!!")
-
+                    self.user_id = self.event.user_id
+                    self.text = self.event.text.lower()
+                    if self.text in ['старт', 'начать', 'start']:
+                        self.sender(self.user_id, "Привет я просто бот!!!")
+                    elif self.text == 'заполнить данные о себе':
+                        self.add_info_user()
+                    elif self.text == 'найти пару':
+                        self.find_a_couple()
         except Exception as ex:
             print(ex)
 
     '''функция ответа на сообщения'''
     def sender(self, user_id, message, keyboard=None):
-        params = {'user_id': user_id, 'message': message, 'random_id': 0}
+        self.params = {'user_id': user_id, 'message': message, 'random_id': 0}
         if keyboard != None:
             keyboard = self.keyboard_bot()
-            params['keyboard'] = keyboard
+            self.params['keyboard'] = keyboard
         else:
-            params = params
-        self.vk_session.method('messages.send', params)
+            self.params = self.params
+        self.vk_session.method('messages.send', self.params)
+
+    '''функция заполнения данных о пользователе (взаимодействует с модулем обращений к БД)'''
+    def add_info_user(self):#логику нужно доработать
+        while True:
+            self.name = self.sender(self.user_id, 'Ваше имя: ')
+            if self.text != '':
+                self.lost_name = self.sender(self.user_id, 'Ваша фамилия: ')
+                if self.text != '':
+                    break
+            else:
+                print('Ведите данные повторно')
+        while True:
+            self.gender = self.sender(self.user_id, 'Укажите ваш пол: ')
+            if self.text == 'женьщина' or 'мужчина' or 'не определился':
+                break
+            else:
+                print('Ведите данные повторно')
+        while True:
+            self.age = self.sender(self.user_id, 'Ваш возраст(цифрой): ')
+            if self.age.isdigit():
+                break
+            else:
+                print('Ведите данные повторно')
+        while True:
+            self.city = self.sender(self.user_id, 'Ваше имя: ')
+            if self.text != '':
+                break
+            else:
+                print('Ведите данные повторно')
 
 
+
+
+    '''Функция поиска пары (взаимодействует с модулем обращений к БД)'''
+    def find_a_couple(self):
+        pass
 
 
 
