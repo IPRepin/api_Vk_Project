@@ -16,7 +16,7 @@ class VkBot:
         emoji_info_user = emoji.emojize(":check_mark_button:")
         emoji_find_a_couple = emoji.emojize(":couple_with_heart_woman_man:")
         self.button_bot = VkKeyboard(one_time=False)
-        name_btn = [f'{emoji_info_user}Заполнить данные о себе', f'{emoji_find_a_couple}Найти пару']
+        name_btn = [f'{emoji_info_user}Заполнить данные о себе!', f'{emoji_find_a_couple}Найти пару!']
         colors_btn = [VkKeyboardColor.PRIMARY, VkKeyboardColor.NEGATIVE]
         for btn, btn_color in zip(name_btn, colors_btn):
             self.button_bot.add_button(btn, btn_color)
@@ -26,13 +26,13 @@ class VkBot:
     def reader(self):
         try:
             for self.event in VkLongPoll(self.vk_session).listen():
-                if self.event.type == VkEventType.MESSAGE_NEW and self.event.to_me:
+                if self.event.type == VkEventType.MESSAGE_NEW and self.event.type == self.event.to_me:
                     self.user_id = self.event.user_id
                     self.text = self.event.text.lower()
                     if self.text in ['старт', 'начать', 'start']:
                         self.sender(self.user_id, "Привет я просто бот!!!")
                     elif self.text == 'заполнить данные о себе':
-                        self.add_info_user(self.user_id)
+                        self.add_info_user(self)
                     elif self.text == 'найти пару':
                         self.find_a_couple()
         except Exception as ex:
@@ -44,17 +44,45 @@ class VkBot:
         if keyboard != None:
             keyboard = self.keyboard_bot()
             self.params['keyboard'] = keyboard
-
         self.vk_session.method('messages.send', self.params)
 
     '''функция заполнения данных о пользователе (взаимодействует с модулем обращений к БД)'''
-    def add_info_user(self, user_id):#логику нужно доработать
-        params = {'user_ids': user_id, 'fields': {
-            'sex': int,
-            'city': 'title',
-            'relation': int
-        }, }
-        self.vk_session.method('users.get', params)
+    def add_info_user(self):#логику нужно доработать
+        while True:
+            self.sender(self.user_id, 'Ведите имя: ')
+            if self.text != '':
+                self.name = self.text
+                break
+            else:
+                print('Ведите имя повторно')
+        while True:
+            self.sender(self.user_id, 'Ведите фамилию: ')
+            if self.text != '':
+                self.lost_name = self.text
+                break
+            else:
+                print('Ведите фамилию повторно')
+        while True:
+            self.sender(self.user_id, 'Укажите ваш пол: ')
+            if self.text == 'женский' or 'мужской':
+                self.gender = self.text
+                break
+            else:
+                print('Ведите данные повторно')
+        while True:
+            self.sender(self.user_id, 'Ваш возраст(цифрой): ')
+            if self.text.isdigit():
+                self.age = self.text
+                break
+            else:
+                print('Ведите данные повторно')
+        while True:
+            self.sender(self.user_id, 'Ведите название города: ')
+            if self.text != '':
+                self.city = self.text
+                break
+            else:
+                print('Ведите город повторно')
         #далее запуск модуля взаимодействия с БД
 
 
@@ -62,12 +90,17 @@ class VkBot:
     def find_a_couple(self):
         pass
 
+    '''Функция добавления в черный список (взаимодействует с модулем обращений к БД)'''
     def add_black_lst(self):
         pass
 
+    '''Функция добавления в избранное (взаимодействует с модулем обращений к БД)'''
     def add_favourites(self):
         pass
 
+    '''Функция вывода результатов поиска с возможностью переключения между результатами'''
+    def search_result(self):
+        pass
 
 
 def main():
