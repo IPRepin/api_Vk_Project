@@ -15,11 +15,11 @@ class VkBot:
     def keyboard_bot(self):
         emoji_info_user = emoji.emojize(":check_mark_button:")
         emoji_find_a_couple = emoji.emojize(":couple_with_heart_woman_man:")
-        self.batton_bot = VkKeyboard(one_time=False)
+        self.button_bot = VkKeyboard(one_time=False)
         name_btn = [f'{emoji_info_user}Заполнить данные о себе', f'{emoji_find_a_couple}Найти пару']
         colors_btn = [VkKeyboardColor.PRIMARY, VkKeyboardColor.NEGATIVE]
         for btn, btn_color in zip(name_btn, colors_btn):
-            self.batton_bot.add_button(btn, btn_color)
+            self.button_bot.add_button(btn, btn_color)
 
 
     '''Функция по распознованию сообщений и user_id. '''
@@ -44,8 +44,7 @@ class VkBot:
         if keyboard != None:
             keyboard = self.keyboard_bot()
             self.params['keyboard'] = keyboard
-        else:
-            self.params = self.params
+
         self.vk_session.method('messages.send', self.params)
 
     '''функция заполнения данных о пользователе (взаимодействует с модулем обращений к БД)'''
@@ -63,6 +62,11 @@ class VkBot:
     def find_a_couple(self):
         pass
 
+    def add_black_lst(self):
+        pass
+
+    def add_favorit(self):
+        pass
 
 
 
