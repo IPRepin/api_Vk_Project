@@ -3,6 +3,7 @@ import vk_api
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.longpoll import VkLongPoll, VkEventType
 from config import vk_group_token
+import emoji
 
 
 '''Создаем класс бота'''
@@ -12,8 +13,10 @@ class VkBot:
 
     '''Функция создания кнопок клавиатуры бота'''
     def keyboard_bot(self):
+        emoji_info_user = emoji.emojize(":check_mark_button:")
+        emoji_find_a_couple = emoji.emojize(":couple_with_heart_woman_man:")
         self.batton_bot = VkKeyboard(one_time=False)
-        name_btn = ['Заполнить данные о себе', 'Найти пару']
+        name_btn = [f'{emoji_info_user}Заполнить данные о себе', f'{emoji_find_a_couple}Найти пару']
         colors_btn = [VkKeyboardColor.PRIMARY, VkKeyboardColor.NEGATIVE]
         for btn, btn_color in zip(name_btn, colors_btn):
             self.batton_bot.add_button(btn, btn_color)
@@ -53,7 +56,7 @@ class VkBot:
             'relation': int
         }, }
         self.vk_session.method('users.get', params)
-
+        #далее запуск модуля взаимодействия с БД
 
 
     '''Функция поиска пары (взаимодействует с модулем обращений к БД)'''
