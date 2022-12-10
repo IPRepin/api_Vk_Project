@@ -65,7 +65,7 @@ class VkBot:
     def add_black_lst(self):
         pass
 
-    def add_favorit(self):
+    def add_favourites(self):
         pass
 
 
