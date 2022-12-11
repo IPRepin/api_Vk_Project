@@ -4,6 +4,7 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.longpoll import VkLongPoll, VkEventType
 from config import vk_group_token
 import emoji
+from vktools import Keyboard, Carousel, ButtonColor, Text
 
 
 '''Создаем класс бота'''
@@ -96,7 +97,33 @@ class VkBot:
 
     '''Функция поиска пары (взаимодействует с модулем обращений к БД)'''
     def find_a_couple(self):
-        pass
+        self.sender(self.user_id, 'Задайте критерии для поиска: ')
+        while True:
+            self.sender(self.user_id, 'Укажите пол: ')
+            self.reader()
+            if self.text == 'женский' or 'мужской':
+                self.search_gender = self.text
+                break
+            else:
+                print('Ведите данные повторно')
+        while True:
+            self.sender(self.user_id, 'Возраст(цифрой): ')#доработать логику диапозоном возраста
+            self.reader()
+            if self.text.isdigit():
+                self.search_age = self.text
+                break
+            else:
+                print('Ведите данные повторно')
+        while True:
+            self.sender(self.user_id, 'Город для поиска: ')
+            self.reader()
+            if self.text != '':
+                self.city = self.text
+                break
+            else:
+                print('Ведите город повторно')
+            # далее запуск модуля взаимодействия с БД
+
 
     '''Функция добавления в черный список (взаимодействует с модулем обращений к БД)'''
     def add_black_lst(self):
@@ -106,9 +133,12 @@ class VkBot:
     def add_favourites(self):
         pass
 
-    '''Функция вывода результатов поиска с возможностью переключения между результатами'''
+    '''Функция получения результатов поиска '''
     def search_result(self):
-        pass
+        search_lst = [] # список id найденнх пользователей передается из модуля взаимодействия с БД
+        return search_lst
+
+
 
 
 def main():

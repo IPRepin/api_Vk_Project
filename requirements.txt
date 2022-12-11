@@ -2,3 +2,4 @@ requests
 tqdm
 vk_api
 emoji
+vktools
