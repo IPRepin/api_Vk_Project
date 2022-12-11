@@ -29,14 +29,17 @@ class VkBot:
                 if self.event.type == VkEventType.MESSAGE_NEW and self.event.type == self.event.to_me:
                     self.user_id = self.event.user_id
                     self.text = self.event.text.lower()
-                    if self.text in ['старт', 'начать', 'start']:
-                        self.sender(self.user_id, "Привет я просто бот!!!")
-                    elif self.text == 'заполнить данные о себе':
-                        self.add_info_user(self)
-                    elif self.text == 'найти пару':
-                        self.find_a_couple()
         except Exception as ex:
             print(ex)
+
+    def hello(self):
+        self.reader()
+        if self.text in ['старт', 'начать', 'start']:
+            self.sender(self.user_id, "Привет я просто бот!!!")
+        elif self.text == 'заполнить данные о себе':
+            self.add_info_user()
+        elif self.text == 'найти пару':
+            self.find_a_couple()
 
     '''функция ответа на сообщения'''
     def sender(self, user_id, message, keyboard=None):
@@ -50,6 +53,7 @@ class VkBot:
     def add_info_user(self):#логику нужно доработать
         while True:
             self.sender(self.user_id, 'Ведите имя: ')
+            self.reader()
             if self.text != '':
                 self.name = self.text
                 break
@@ -57,6 +61,7 @@ class VkBot:
                 print('Ведите имя повторно')
         while True:
             self.sender(self.user_id, 'Ведите фамилию: ')
+            self.reader()
             if self.text != '':
                 self.lost_name = self.text
                 break
@@ -64,6 +69,7 @@ class VkBot:
                 print('Ведите фамилию повторно')
         while True:
             self.sender(self.user_id, 'Укажите ваш пол: ')
+            self.reader()
             if self.text == 'женский' or 'мужской':
                 self.gender = self.text
                 break
@@ -71,6 +77,7 @@ class VkBot:
                 print('Ведите данные повторно')
         while True:
             self.sender(self.user_id, 'Ваш возраст(цифрой): ')
+            self.reader()
             if self.text.isdigit():
                 self.age = self.text
                 break
@@ -78,6 +85,7 @@ class VkBot:
                 print('Ведите данные повторно')
         while True:
             self.sender(self.user_id, 'Ведите название города: ')
+            self.reader()
             if self.text != '':
                 self.city = self.text
                 break
