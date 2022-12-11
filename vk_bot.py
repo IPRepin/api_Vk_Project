@@ -5,6 +5,7 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 from config import vk_group_token
 import emoji
 from vktools import Keyboard, Carousel, ButtonColor, Text
+import vk_api_info
 
 
 '''Создаем класс бота'''
@@ -135,7 +136,7 @@ class VkBot:
 
     '''Функция получения результатов поиска '''
     def search_result(self):
-        search_lst = [] # список id найденнх пользователей передается из модуля взаимодействия с БД
+        search_lst = [] # список id найденных пользователей передается из модуля взаимодействия с БД
         return search_lst
 
 

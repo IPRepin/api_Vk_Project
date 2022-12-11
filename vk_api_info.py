@@ -1,5 +1,4 @@
 import vk_api
-from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.longpoll import VkLongPoll, VkEventType
 from config import vk_group_token
 import vk_bot
@@ -20,10 +19,11 @@ class VkInfo:
                 'photo_sizes': '1',
             }).json
             self.req_json = self.req['response']['items']
-            return self.req_json
+        return self.req_json
 
 def main():
     vk_info_user = VkInfo(vk_group_token)
+    vk_info_user.photos_get()
 
 
 if __name__ == '__main__':
