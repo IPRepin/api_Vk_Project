@@ -21,6 +21,7 @@ class VkInfo:
             self.req_json = self.req['response']['items']
         return self.req_json
 
+
 def main():
     vk_info_user = VkInfo(vk_group_token)
     vk_info_user.photos_get()
